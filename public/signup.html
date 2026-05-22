@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sign Up - Playsculpt</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:"Courier New", monospace;
+    background:#7fc7ff;
+    color:#111;
+}
+
+.page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    font-size:40px;
+    font-weight:bold;
+    padding:12px;
+    border-bottom:4px solid #111;
+}
+
+.main{
+    flex:1;
+    display:grid;
+    grid-template-columns:52% 48%;
+    min-height:0;
+}
+
+/* LEFT SIGNUP AREA */
+
+.signup-area{
+    background:#f3f3f3;
+    padding:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-right:4px solid #111;
+}
+
+.signup-box{
+    width:100%;
+    max-width:620px;
+    background:white;
+    border:4px solid #222;
+    padding:24px;
+}
+
+h1{
+    margin:0 0 8px;
+    color:#2447a8;
+    font-size:32px;
+}
+
+.subtitle{
+    line-height:1.45;
+    margin:0 0 18px;
+}
+
+.form-row{
+    margin-bottom:14px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    color:#4b2a96;
+    margin-bottom:5px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    font-family:"Courier New", monospace;
+    font-size:16px;
+    border:3px solid #111;
+    background:#eeeeff;
+}
+
+input:focus{
+    outline:none;
+    background:white;
+}
+
+.signup-button{
+    width:100%;
+    background:#2447c7;
+    color:white;
+    border:3px solid #111;
+    font-family:"Courier New", monospace;
+    font-size:18px;
+    font-weight:bold;
+    padding:13px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.signup-button:hover{
+    background:#4b2a96;
+}
+
+.small-links{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.small-links a{
+    background:#fff4cf;
+    color:#111;
+    text-decoration:none;
+    border:3px solid #7c5b18;
+    padding:10px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.note{
+    margin-top:16px;
+    background:#eeeeff;
+    border:3px solid #333;
+    padding:12px;
+    line-height:1.4;
+}
+
+/* RIGHT SCENE - STARTER ISLAND */
+
+.scene{
+    position:relative;
+    background:#7fc7ff;
+    overflow:hidden;
+}
+
+.sun{
+    position:absolute;
+    right:40px;
+    top:35px;
+    width:72px;
+    height:72px;
+    background:#ffd83b;
+    border:4px solid #d49d00;
+    border-radius:50%;
+}
+
+.cloud{
+    position:absolute;
+    top:90px;
+    left:45px;
+    width:90px;
+    height:25px;
+    background:white;
+    border:2px solid #ddd;
+    box-shadow:40px 15px 0 white, 85px 0 0 white;
+}
+
+.cloud2{
+    top:165px;
+    left:265px;
+}
+
+.water{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:210px;
+    background:#3f8fd8;
+    border-top:4px solid #2266a8;
+}
+
+.island{
+    position:absolute;
+    left:50%;
+    bottom:150px;
+    width:340px;
+    height:130px;
+    transform:translateX(-50%);
+    background:#49a33f;
+    border:4px solid #1f6b24;
+    border-radius:50% 50% 18% 18%;
+}
+
+.sand{
+    position:absolute;
+    left:50%;
+    bottom:135px;
+    width:285px;
+    height:55px;
+    transform:translateX(-50%);
+    background:#d8b16b;
+    border:4px solid #8b6527;
+    border-radius:50%;
+}
+
+.portal-base{
+    position:absolute;
+    left:50%;
+    bottom:220px;
+    width:190px;
+    height:45px;
+    transform:translateX(-50%);
+    background:#777;
+    border:4px solid #333;
+}
+
+.portal-left,
+.portal-right{
+    position:absolute;
+    bottom:260px;
+    width:42px;
+    height:155px;
+    background:#b9b9c9;
+    border:4px solid #333;
+}
+
+.portal-left{
+    left:calc(50% - 95px);
+}
+
+.portal-right{
+    left:calc(50% + 53px);
+}
+
+.portal-top{
+    position:absolute;
+    left:50%;
+    bottom:405px;
+    width:190px;
+    height:42px;
+    transform:translateX(-50%);
+    background:#b9b9c9;
+    border:4px solid #333;
+}
+
+.portal-glow{
+    position:absolute;
+    left:50%;
+    bottom:265px;
+    width:105px;
+    height:135px;
+    transform:translateX(-50%);
+    background:#9d7cff;
+    border:4px solid #4b2a96;
+}
+
+.portal-glow::after{
+    content:"";
+    position:absolute;
+    left:18px;
+    top:18px;
+    width:62px;
+    height:92px;
+    background:#c8b8ff;
+    border:3px solid #6d4bd8;
+}
+
+.scene-sign{
+    position:absolute;
+    left:50%;
+    bottom:465px;
+    width:245px;
+    transform:translateX(-50%);
+    background:#ffd83b;
+    border:4px solid #111;
+    text-align:center;
+    font-weight:bold;
+    padding:10px;
+}
+
+.palm-trunk{
+    position:absolute;
+    left:70px;
+    bottom:205px;
+    width:30px;
+    height:130px;
+    background:#7b4a20;
+    border:4px solid #3e220d;
+}
+
+.palm-top{
+    position:absolute;
+    left:35px;
+    bottom:320px;
+    width:105px;
+    height:62px;
+    background:#238a2a;
+    border:4px solid #165b1b;
+}
+
+.palm-top.two{
+    transform:rotate(38deg);
+}
+
+.palm-top.three{
+    transform:rotate(-38deg);
+}
+
+.crate{
+    position:absolute;
+    right:65px;
+    bottom:195px;
+    width:58px;
+    height:58px;
+    background:#b85a3a;
+    border:4px solid #6d2d16;
+}
+
+.crate::before{
+    content:"";
+    position:absolute;
+    left:23px;
+    top:0;
+    width:5px;
+    height:50px;
+    background:#6d2d16;
+}
+
+.crate::after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:23px;
+    width:50px;
+    height:5px;
+    background:#6d2d16;
+}
+
+.wave{
+    position:absolute;
+    height:12px;
+    width:100px;
+    border-top:4px solid #fff;
+}
+
+.wave1{
+    left:35px;
+    bottom:80px;
+}
+
+.wave2{
+    right:55px;
+    bottom:95px;
+}
+
+.wave3{
+    left:48%;
+    bottom:45px;
+}
+
+/* FOOTER */
+
+.footer{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-top:4px solid #111;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+    .main{
+        display:flex;
+        flex-direction:column-reverse;
+    }
+
+    .signup-area{
+        border-right:none;
+        border-top:4px solid #111;
+    }
+
+    .scene{
+        height:420px;
+    }
+
+    .scene-sign{
+        bottom:350px;
+    }
+
+    .portal-base{
+        bottom:150px;
+    }
+
+    .portal-left,
+    .portal-right{
+        bottom:190px;
+        height:120px;
+    }
+
+    .portal-top{
+        bottom:300px;
+    }
+
+    .portal-glow{
+        bottom:195px;
+        height:100px;
+    }
+
+    .island{
+        bottom:85px;
+    }
+
+    .sand{
+        bottom:75px;
+    }
+
+    .water{
+        height:160px;
+    }
+
+    .palm-trunk,
+    .palm-top,
+    .crate{
+        display:none;
+    }
+
+    .cloud2{
+        display:none;
+    }
+}
+
+@media(max-width:520px){
+    .header{
+        font-size:28px;
+    }
+
+    .signup-box{
+        padding:16px;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .small-links{
+        grid-template-columns:1fr;
+    }
+
+    .scene{
+        height:360px;
+    }
+
+    .scene-sign{
+        bottom:300px;
+        width:215px;
+        font-size:14px;
+    }
+
+    .portal-base{
+        width:160px;
+        bottom:130px;
+    }
+
+    .portal-left{
+        left:calc(50% - 80px);
+        bottom:165px;
+        height:105px;
+    }
+
+    .portal-right{
+        left:calc(50% + 38px);
+        bottom:165px;
+        height:105px;
+    }
+
+    .portal-top{
+        width:160px;
+        bottom:260px;
+    }
+
+    .portal-glow{
+        width:85px;
+        height:88px;
+        bottom:170px;
+    }
+
+    .portal-glow::after{
+        width:48px;
+        height:58px;
+    }
+
+    .island{
+        width:285px;
+        bottom:70px;
+    }
+
+    .sand{
+        width:240px;
+        bottom:62px;
+    }
+
+    .sun{
+        width:58px;
+        height:58px;
+    }
+
+    .cloud{
+        left:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="header">Join Playsculpt</div>
+
+<div class="main">
+
+    <div class="signup-area">
+
+        <div class="signup-box">
+
+            <h1>Create your account!</h1>
+
+            <p class="subtitle">
+                Sign up to start your journey and have a blast! After you sign up, you will first be teleported to Sculpt City - our hub world where every player has a persistent house, all tied to game creation and playing games!
+            </p>
+
+            <form action="/signup" method="POST">
+
+                <div class="form-row">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Choose a username" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Create a password" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="confirm">Confirm Password</label>
+                    <input id="confirm" name="confirm" type="password" placeholder="Re-enter password" required>
+                </div>
+
+                <button class="signup-button" type="submit">Sign Up</button>
+
+            </form>
+
+            <div class="small-links">
+                <a href="login.html">Already have an account?</a>
+                <a href="index.html">Back Home</a>
+            </div>
+
+            <div class="note">
+                <b>SCULPT CITY</b><br>
+                After signing up, you will start in Sculpt City, Playsculpt's world for building and interior designing houses, exploring the city, driving cars, finding developer teams for games, finding games to play, and most importantly starting your Playsculpt journey!
+
+        </div>
+
+    </div>
+
+    <div class="scene">
+
+        <div class="sun"></div>
+
+        <div class="cloud"></div>
+        <div class="cloud cloud2"></div>
+
+        <div class="scene-sign">SCULPT CITY</div>
+
+        <div class="portal-top"></div>
+        <div class="portal-left"></div>
+        <div class="portal-right"></div>
+        <div class="portal-glow"></div>
+        <div class="portal-base"></div>
+
+        <div class="palm-trunk"></div>
+        <div class="palm-top"></div>
+        <div class="palm-top two"></div>
+        <div class="palm-top three"></div>
+
+     
+
+        <div class="water"></div>
+        <div class="sand"></div>
+        <div class="island"></div>
+
+
+
+    </div>
+
+</div>
+
+<div class="footer">&copy; 2026 Playsculpt</div>
+
+</div>
+
+</body>
+</html>

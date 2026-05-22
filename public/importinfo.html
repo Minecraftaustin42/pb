@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Playsculpt Importing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:"Courier New", monospace;
+    background:#7fc7ff;
+    color:#111;
+}
+
+.header{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    font-size:42px;
+    font-weight:bold;
+    padding:16px;
+    border-bottom:4px solid #111;
+}
+
+.main{
+    max-width:1100px;
+    margin:auto;
+    padding:24px;
+}
+
+.hero{
+    display:flex;
+    gap:24px;
+    background:#f4f4f4;
+    border:4px solid #111;
+    padding:22px;
+    margin-bottom:24px;
+    flex-wrap:wrap;
+}
+
+.scene{
+    flex:1;
+    min-width:320px;
+    min-height:340px;
+    position:relative;
+    background:#87ceff;
+    border:4px solid #111;
+    overflow:hidden;
+}
+
+.sun{
+    position:absolute;
+    right:28px;
+    top:24px;
+    width:62px;
+    height:62px;
+    background:#ffd83b;
+    border:4px solid #c69200;
+    border-radius:50%;
+}
+
+.cloud{
+    position:absolute;
+    width:90px;
+    height:26px;
+    background:white;
+    border:3px solid #ddd;
+    top:58px;
+    left:28px;
+}
+
+.cloud::after{
+    content:"";
+    position:absolute;
+    left:42px;
+    top:10px;
+    width:78px;
+    height:24px;
+    background:white;
+    border:3px solid #ddd;
+    border-left:none;
+}
+
+.cloud2{
+    top:130px;
+    left:235px;
+    transform:scale(.8);
+}
+
+.ground{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:125px;
+    background:#4ca641;
+    border-top:4px solid #2f7429;
+}
+
+.import-station{
+    position:absolute;
+    left:50%;
+    bottom:72px;
+    transform:translateX(-50%);
+    width:270px;
+    height:150px;
+    background:#d7d7d7;
+    border:4px solid #333;
+}
+
+.station-title{
+    height:34px;
+    background:#4b2a96;
+    border-bottom:4px solid #222;
+    color:white;
+    text-align:center;
+    line-height:30px;
+    font-weight:bold;
+}
+
+.file-card{
+    position:absolute;
+    left:24px;
+    top:54px;
+    width:62px;
+    height:76px;
+    background:white;
+    border:4px solid #111;
+}
+
+.file-card::after{
+    content:"RBXL";
+    position:absolute;
+    bottom:9px;
+    left:0;
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.file-corner{
+    position:absolute;
+    right:-4px;
+    top:-4px;
+    width:20px;
+    height:20px;
+    background:#ddd;
+    border-left:4px solid #111;
+    border-bottom:4px solid #111;
+}
+
+.import-arrow{
+    position:absolute;
+    left:112px;
+    top:76px;
+    width:42px;
+    height:16px;
+    background:#333;
+}
+
+.import-arrow::after{
+    content:"";
+    position:absolute;
+    right:-18px;
+    top:-10px;
+    border-left:22px solid #333;
+    border-top:18px solid transparent;
+    border-bottom:18px solid transparent;
+}
+
+.model-stack{
+    position:absolute;
+    right:22px;
+    top:58px;
+    width:70px;
+    height:72px;
+}
+
+.model-block{
+    position:absolute;
+    width:34px;
+    height:34px;
+    background:#d94c43;
+    border:4px solid #782019;
+}
+
+.model-block.one{
+    left:18px;
+    top:0;
+}
+
+.model-block.two{
+    left:0;
+    top:36px;
+}
+
+.model-block.three{
+    left:36px;
+    top:36px;
+}
+
+.tree{
+    position:absolute;
+    left:24px;
+    bottom:125px;
+    width:52px;
+    height:115px;
+}
+
+.tree-trunk{
+    position:absolute;
+    left:20px;
+    bottom:0;
+    width:18px;
+    height:58px;
+    background:#6b431f;
+    border:3px solid #3d2511;
+}
+
+.tree-top{
+    position:absolute;
+    left:0;
+    top:0;
+    width:58px;
+    height:58px;
+    background:#238a2a;
+    border:3px solid #165b1b;
+}
+
+.small-sign{
+    position:absolute;
+    right:28px;
+    bottom:125px;
+    width:90px;
+    height:76px;
+}
+
+.small-sign-post{
+    position:absolute;
+    left:39px;
+    bottom:0;
+    width:12px;
+    height:42px;
+    background:#7b4a20;
+    border:2px solid #3e220d;
+}
+
+.small-sign-board{
+    position:absolute;
+    left:0;
+    top:0;
+    width:90px;
+    height:38px;
+    background:#d8b16b;
+    border:3px solid #5e3d16;
+    text-align:center;
+    line-height:32px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.hero-text{
+    flex:1;
+    min-width:320px;
+}
+
+.hero-text h1{
+    margin-top:0;
+    color:#2447a8;
+    font-size:34px;
+}
+
+.hero-text p{
+    line-height:1.7;
+    font-size:17px;
+}
+
+.section{
+    background:#f4f4f4;
+    border:4px solid #111;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.section h2{
+    margin-top:0;
+    color:#2447a8;
+    border-bottom:3px solid #4b2a96;
+    padding-bottom:10px;
+}
+
+.section p{
+    line-height:1.7;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;
+    margin-top:20px;
+}
+
+.feature{
+    background:white;
+    border:3px solid #222;
+    padding:16px;
+}
+
+.feature b{
+    color:#4b2a96;
+    display:block;
+    margin-bottom:8px;
+}
+
+.steps{
+    display:grid;
+    gap:14px;
+    margin-top:18px;
+}
+
+.step{
+    background:#eeeeff;
+    border:3px solid #222;
+    padding:15px;
+}
+
+.step b{
+    color:#4b2a96;
+}
+
+.notice{
+    background:#fff4c7;
+    border:3px solid #b6911a;
+    padding:18px;
+    margin-top:18px;
+}
+
+.warning{
+    background:#ffd6d6;
+    border:3px solid #9b2929;
+    padding:18px;
+    margin-top:18px;
+}
+
+.buttons{
+    display:grid;
+    gap:14px;
+    margin-top:22px;
+}
+
+.buttons a{
+    display:block;
+    background:#2447c7;
+    color:white;
+    text-decoration:none;
+    text-align:center;
+    padding:15px;
+    border:3px solid #111;
+    font-weight:bold;
+}
+
+.buttons a:hover{
+    background:#4b2a96;
+}
+
+.footer{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    padding:14px;
+    border-top:4px solid #111;
+    margin-top:30px;
+}
+
+@media(max-width:700px){
+
+    .header{
+        font-size:30px;
+    }
+
+    .main{
+        padding:14px;
+    }
+
+    .hero{
+        padding:14px;
+    }
+
+    .hero-text h1{
+        font-size:28px;
+    }
+
+    .scene{
+        min-height:300px;
+    }
+
+    .cloud2{
+        left:185px;
+    }
+
+    .import-station{
+        width:245px;
+        height:140px;
+        bottom:64px;
+    }
+
+    .small-sign{
+        display:none;
+    }
+
+    .tree{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    Playsculpt Importing
+</div>
+
+<div class="main">
+
+    <div class="hero">
+
+        <div class="scene">
+
+            <div class="sun"></div>
+
+            <div class="cloud"></div>
+            <div class="cloud cloud2"></div>
+
+            <div class="ground"></div>
+
+            <div class="tree">
+                <div class="tree-trunk"></div>
+                <div class="tree-top"></div>
+            </div>
+
+            <div class="small-sign">
+                <div class="small-sign-board">IMPORT</div>
+                <div class="small-sign-post"></div>
+            </div>
+
+            <div class="import-station">
+
+                <div class="station-title">PROJECT IMPORTER</div>
+
+                <div class="file-card">
+                    <div class="file-corner"></div>
+                </div>
+
+                <div class="import-arrow"></div>
+
+                <div class="model-stack">
+                    <div class="model-block one"></div>
+                    <div class="model-block two"></div>
+                    <div class="model-block three"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="hero-text">
+
+            <h1>Import Your Creations Into Playsculpt</h1>
+
+            <p>
+                Playsculpt lets creators import supported project files so they
+                can keep building inside a browser-based game platform.
+            </p>
+
+            <p>
+                You can bring in compatible maps, builds, mesh parts, models,
+                and supported Roblox-style scripts that you created or have
+                permission to use.
+            </p>
+
+            <div class="buttons">
+                <a href="import.html">Open Importer</a>
+                <a href="creatorslanding.html">Create on Playsculpt</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>What This Page Means</h2>
+
+        <p>
+            The importer is made to help creators move their own projects into
+            Playsculpt. It is not meant for stealing games, copying other
+            creators, or using assets you do not own.
+        </p>
+
+        <div class="notice">
+            Playsculpt is independent and is not affiliated with Roblox.
+            Only import content you made or have clear permission to use.
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>What Can Be Imported?</h2>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <b>RBXL and RBXLX Files</b>
+                Import supported project files and convert them into
+                Playsculpt projects.
+            </div>
+
+            <div class="feature">
+                <b>Maps and Builds</b>
+                Bring over block builds, structures, rooms, towns,
+                and map layouts.
+            </div>
+
+            <div class="feature">
+                <b>Mesh Parts</b>
+                Move compatible mesh parts and models into the
+                Playsculpt editor.
+            </div>
+
+            <div class="feature">
+                <b>Supported Scripts</b>
+                Import compatible Roblox-style code and continue editing
+                it with Playsculpt tools.
+            </div>
+
+            <div class="feature">
+                <b>Parts and Properties</b>
+                Keep basic object data like position, size, color,
+                material, and names.
+            </div>
+
+            <div class="feature">
+                <b>Creator Assets</b>
+                Use your own models, builds, and project files as a
+                starting point.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>How Importing Works</h2>
+
+        <div class="steps">
+
+            <div class="step">
+                <b>Step 1:</b>
+                Export or save your supported project file.
+            </div>
+
+            <div class="step">
+                <b>Step 2:</b>
+                Upload the file to the Playsculpt importer.
+            </div>
+
+            <div class="step">
+                <b>Step 3:</b>
+                Playsculpt reads the project data and converts supported parts.
+            </div>
+
+            <div class="step">
+                <b>Step 4:</b>
+                Review the imported map inside the Playsculpt editor.
+            </div>
+
+            <div class="step">
+                <b>Step 5:</b>
+                Fix, edit, publish, or keep building your game.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>Script Compatibility</h2>
+
+        <p>
+            Some scripts may work after being converted, while others may need
+            edits. Playsculpt can support Roblox-style coding, but not every
+            feature from another engine will work exactly the same.
+        </p>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <b>Good For</b>
+                Simple gameplay scripts, object behavior, doors,
+                coins, buttons, checkpoints, and basic systems.
+            </div>
+
+            <div class="feature">
+                <b>May Need Fixing</b>
+                Advanced services, custom APIs, marketplace features,
+                plugins, and platform-specific systems.
+            </div>
+
+            <div class="feature">
+                <b>Editor Tools</b>
+                Scripts can be opened, reviewed, and adjusted inside
+                Playsculpt after import.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>Creator Safety Rules</h2>
+
+        <p>
+            To keep Playsculpt fair, creators must only upload projects and
+            assets they own or have permission to use.
+        </p>
+
+        <div class="warning">
+            Do not upload stolen maps, leaked games, copied marketplace assets,
+            private files, or another creator's work without permission.
+        </div>
+
+        <div class="notice">
+            Imported content may be reviewed or removed if it breaks copyright
+            rules, community rules, or platform safety rules.
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>Why Use The Importer?</h2>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <b>Save Time</b>
+                Start from an existing project instead of rebuilding
+                everything from scratch.
+            </div>
+
+            <div class="feature">
+                <b>Move To The Web</b>
+                Continue building inside a browser-based editor on PC,
+                tablet, or mobile.
+            </div>
+
+            <div class="feature">
+                <b>Keep Building</b>
+                Use imported work as the base for a new Playsculpt game.
+            </div>
+
+            <div class="feature">
+                <b>Share Faster</b>
+                Import, edit, test, and publish your game for the
+                Playsculpt community.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>Start Importing</h2>
+
+        <p>
+            Ready to bring your own project into Playsculpt? Open the importer
+            or go to the creator page to start building.
+        </p>
+
+        <div class="buttons">
+            <a href="import.html">Open Importer</a>
+            <a href="creatorslanding.html">Create on Playsculpt</a>
+            <a href="signup.html">Sign Up</a>
+            <a href="login.html">Login</a>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    &copy; 2026 Playsculpt
+</div>
+
+</body>
+</html>

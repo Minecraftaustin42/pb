@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Playsculpt</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html{
+    font-size:16px;
+}
+
+body{
+    margin:0;
+    font-family:"Courier New", monospace;
+    background:#7fc7ff;
+    color:#111;
+    min-width:320px;
+}
+
+.page{
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    background:#f3f3f3;
+    border-left:4px solid #111;
+    border-right:4px solid #111;
+}
+
+.header{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    font-size:42px;
+    font-weight:bold;
+    padding:12px;
+    border-bottom:4px solid #111;
+}
+
+.main{
+    display:grid;
+    grid-template-columns:42% 58%;
+    height:calc(100vh - 104px);
+    min-height:620px;
+    max-height:820px;
+    overflow:hidden;
+}
+
+.scene{
+    position:relative;
+    background:#7fc7ff;
+    border-right:4px solid #111;
+    overflow:hidden;
+}
+
+.sky{
+    position:absolute;
+    inset:0;
+    height:58%;
+    background:#7fc7ff;
+}
+
+.cloud{
+    position:absolute;
+    top:55px;
+    left:35px;
+    width:90px;
+    height:25px;
+    background:white;
+    border:2px solid #ddd;
+    box-shadow:40px 15px 0 white, 85px 0 0 white;
+}
+
+.cloud2{
+    top:145px;
+    left:260px;
+}
+
+.sun{
+    position:absolute;
+    right:35px;
+    top:30px;
+    width:75px;
+    height:75px;
+    background:#ffd83b;
+    border:4px solid #d49d00;
+    border-radius:50%;
+}
+
+.ground{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:43%;
+    background:#49a33f;
+    border-top:4px solid #2f7429;
+}
+
+.path{
+    position:absolute;
+    bottom:0;
+    left:39%;
+    width:90px;
+    height:250px;
+    background:#888;
+    border-left:4px solid #666;
+    border-right:4px solid #666;
+    transform:skewX(-12deg);
+}
+
+.house{
+    position:absolute;
+    left:132px;
+    bottom:245px;
+    width:250px;
+    height:170px;
+    background:#c2b17c;
+    border:4px solid #6f613f;
+}
+
+.roof{
+    position:absolute;
+    left:102px;
+    bottom:415px;
+    width:310px;
+    height:105px;
+    background:#b93125;
+    border:4px solid #7c1f18;
+    clip-path:polygon(50% 0%,100% 100%,0% 100%);
+}
+
+.door{
+    position:absolute;
+    left:292px;
+    bottom:245px;
+    width:48px;
+    height:82px;
+    background:#5b351d;
+    border:4px solid #2b160b;
+}
+
+.window{
+    position:absolute;
+    left:178px;
+    bottom:318px;
+    width:55px;
+    height:52px;
+    background:#6fb5e8;
+    border:5px solid #684218;
+}
+
+.tree-trunk{
+    position:absolute;
+    left:35px;
+    bottom:245px;
+    width:42px;
+    height:125px;
+    background:#6b431f;
+    border:3px solid #3d2511;
+}
+
+.tree-top{
+    position:absolute;
+    left:0;
+    bottom:355px;
+    width:125px;
+    height:80px;
+    background:#238a2a;
+    border:3px solid #165b1b;
+}
+
+.brick-pile{
+    position:absolute;
+    left:315px;
+    bottom:72px;
+    width:90px;
+    height:45px;
+}
+
+.brick{
+    position:absolute;
+    width:26px;
+    height:13px;
+    background:#b85a3a;
+    border:2px solid #6d2d16;
+}
+
+.brick1{ left:0; bottom:0; }
+.brick2{ left:22px; bottom:0; }
+.brick3{ left:44px; bottom:0; }
+.brick4{ left:11px; bottom:13px; }
+.brick5{ left:33px; bottom:13px; }
+.brick6{ left:22px; bottom:26px; }
+
+.sign-post{
+    position:absolute;
+    left:325px;
+    bottom:110px;
+    width:10px;
+    height:48px;
+    background:#7b4a20;
+    border:2px solid #3e220d;
+}
+
+.sign{
+    position:absolute;
+    left:285px;
+    bottom:150px;
+    width:92px;
+    height:34px;
+    background:#d8b16b;
+    border:3px solid #5e3d16;
+    text-align:center;
+    font-size:11px;
+    font-weight:bold;
+    line-height:28px;
+}
+
+.float-block{
+    position:absolute;
+    right:45px;
+    bottom:290px;
+    width:42px;
+    height:42px;
+    background:#d94c43;
+    border:4px solid #782019;
+}
+
+.character{
+    position:absolute;
+    left:70px;
+    bottom:55px;
+    width:170px;
+    height:315px;
+}
+
+.char-head{
+    position:absolute;
+    left:45px;
+    top:0;
+    width:80px;
+    height:80px;
+    background:#ffd43b;
+    border:4px solid #111;
+}
+
+.char-eye{
+    position:absolute;
+    top:25px;
+    width:8px;
+    height:12px;
+    background:#111;
+}
+
+.char-eye.left{ left:23px; }
+.char-eye.right{ right:23px; }
+
+.char-smile{
+    position:absolute;
+    left:25px;
+    top:48px;
+    width:30px;
+    height:14px;
+    border-bottom:4px solid #111;
+    border-radius:0 0 20px 20px;
+}
+
+.char-body{
+    position:absolute;
+    left:45px;
+    top:80px;
+    width:80px;
+    height:105px;
+    background:#2468d8;
+    border:4px solid #111;
+}
+
+.char-arm{
+    position:absolute;
+    top:80px;
+    width:45px;
+    height:105px;
+    background:#f28c28;
+    border:4px solid #111;
+}
+
+.char-arm.left{ left:0; }
+.char-arm.right{ right:0; }
+
+.char-leg{
+    position:absolute;
+    top:185px;
+    width:40px;
+    height:110px;
+    background:#6d3fbf;
+    border:4px solid #111;
+}
+
+.char-leg.left{ left:45px; }
+.char-leg.right{ left:85px; }
+
+.content{
+    background:#f3f3f3;
+    padding:16px;
+    overflow-y:auto;
+}
+
+.content-box{
+    background:white;
+    border:4px solid #222;
+    padding:18px;
+    max-width:760px;
+    margin:0 auto;
+}
+
+h1,h2{
+    color:#2447a8;
+}
+
+h1{
+    margin:0 0 8px;
+    font-size:28px;
+}
+
+h2{
+    border-top:3px solid #4b2a96;
+    padding-top:12px;
+    margin:20px 0 8px;
+    font-size:22px;
+}
+
+p{
+    line-height:1.45;
+    margin:8px 0;
+}
+
+.top-buttons{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin:14px 0 10px;
+}
+
+.button{
+    background:#2447c7;
+    color:white;
+    text-decoration:none;
+    padding:11px 12px;
+    border:3px solid #111;
+    font-weight:bold;
+    text-align:center;
+    display:block;
+}
+
+.button:hover{
+    background:#4b2a96;
+}
+
+.feature{
+    border:3px solid #333;
+    margin:8px 0;
+    padding:10px;
+    background:#eeeeff;
+}
+
+.feature b{
+    color:#4b2a96;
+}
+
+.import-box{
+    background:#fff4cf;
+    border:4px solid #7c5b18;
+    padding:14px;
+    margin-top:10px;
+}
+
+.import-box h2{
+    border-top:none;
+    padding-top:0;
+    margin-top:0;
+}
+
+.import-box .button{
+    margin-top:12px;
+    background:#7c4bd8;
+}
+
+.footer{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-top:4px solid #111;
+}
+
+/* keeps layout from stretching weird on zoomed out huge screens */
+@media(min-width:1401px){
+    body{
+        background:#7fc7ff;
+    }
+}
+
+/* laptop/smaller desktop */
+@media(max-width:1000px){
+    .main{
+        grid-template-columns:45% 55%;
+    }
+
+    .house{
+        left:115px;
+    }
+
+    .roof{
+        left:85px;
+    }
+
+    .door{
+        left:275px;
+    }
+
+    .window{
+        left:160px;
+    }
+
+    .character{
+        left:45px;
+    }
+}
+
+/* mobile/tablet */
+@media(max-width:850px){
+    .page{
+        border-left:none;
+        border-right:none;
+    }
+
+    .header{
+        font-size:34px;
+    }
+
+    .main{
+        display:block;
+        height:auto;
+        min-height:0;
+        max-height:none;
+        overflow:visible;
+    }
+
+    .scene{
+        height:410px;
+        border-right:none;
+        border-bottom:4px solid #111;
+    }
+
+    .content{
+        overflow:visible;
+    }
+
+    .house{
+        left:145px;
+        bottom:170px;
+        width:210px;
+        height:145px;
+    }
+
+    .roof{
+        left:120px;
+        bottom:315px;
+        width:260px;
+        height:90px;
+    }
+
+    .door{
+        left:290px;
+        bottom:170px;
+    }
+
+    .window{
+        left:180px;
+        bottom:235px;
+    }
+
+    .character{
+        left:25px;
+        bottom:28px;
+        transform:scale(.82);
+        transform-origin:bottom left;
+    }
+
+    .float-block{
+        right:35px;
+    }
+}
+
+@media(max-width:620px){
+    .top-buttons{
+        grid-template-columns:1fr;
+    }
+
+    .content-box{
+        padding:14px;
+    }
+}
+
+@media(max-width:480px){
+    .header{
+        font-size:28px;
+    }
+
+    .scene{
+        height:370px;
+    }
+
+    .house{
+        left:115px;
+        bottom:155px;
+        width:185px;
+        height:125px;
+    }
+
+    .roof{
+        left:95px;
+        bottom:280px;
+        width:230px;
+        height:75px;
+    }
+
+    .door{
+        left:245px;
+        bottom:155px;
+        width:40px;
+        height:70px;
+    }
+
+    .window{
+        left:145px;
+        bottom:205px;
+        width:45px;
+        height:42px;
+    }
+
+    .tree-trunk,
+    .tree-top,
+    .float-block{
+        display:none;
+    }
+
+    .character{
+        left:20px;
+        bottom:25px;
+        transform:scale(.72);
+        transform-origin:bottom left;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="header">Playsculpt</div>
+
+<div class="main">
+
+    <div class="scene">
+        <div class="sky"></div>
+        <div class="sun"></div>
+
+        <div class="cloud"></div>
+        <div class="cloud cloud2"></div>
+
+        <div class="ground"></div>
+        <div class="path"></div>
+
+        <div class="roof"></div>
+        <div class="house"></div>
+        <div class="window"></div>
+        <div class="door"></div>
+
+        <div class="tree-trunk"></div>
+        <div class="tree-top"></div>
+
+        <div class="brick-pile">
+            <div class="brick brick1"></div>
+            <div class="brick brick2"></div>
+            <div class="brick brick3"></div>
+            <div class="brick brick4"></div>
+            <div class="brick brick5"></div>
+            <div class="brick brick6"></div>
+        </div>
+
+        <div class="sign-post"></div>
+        <div class="sign">PLAYSCULPT</div>
+
+     
+
+        <div class="character">
+            <div class="char-head">
+                <div class="char-eye left"></div>
+                <div class="char-eye right"></div>
+                <div class="char-smile"></div>
+            </div>
+
+            <div class="char-arm left"></div>
+            <div class="char-arm right"></div>
+            <div class="char-body"></div>
+            <div class="char-leg left"></div>
+            <div class="char-leg right"></div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="content-box">
+
+            <h1>Build games. Play games. Share games.</h1>
+
+            <p>
+                Playsculpt is a browser game platform where players can create games,
+                play community-made worlds, make friends, and build something together.
+            </p>
+
+            <div class="top-buttons">
+                <a class="button" href="signup.html">Sign Up</a>
+                <a class="button" href="login.html">Login</a>
+                <a class="button" href="creatorslanding.html">Start Creating</a>
+            </div>
+
+            <h2>Welcome to Playsculpt</h2>
+
+            <p>
+                Playsculpt is made for players and creators. You can build your own
+                games, publish them, trade assets, and discover games made by others.
+            </p>
+
+            <p>
+                The goal is to bring back a simple classic game platform feeling,
+                while making something new, open, and community-driven.
+            </p>
+
+            <h2>Create on Playsculpt</h2>
+
+            <div class="feature">
+                <b>Create Anywhere</b><br>
+                Build games from your browser on mobile, tablet, or PC.
+            </div>
+
+            <div class="feature">
+                <b>Publish Fast</b><br>
+                Share your game with the Playsculpt community without needing downloads.
+            </div>
+
+            <div class="feature">
+                <b>Creator Tools</b><br>
+                Use parts, meshes, scripts, assets, templates, and browser-based building tools.
+            </div>
+
+            <div class="import-box">
+                <h2>Import Your Creations</h2>
+
+                <p>
+                    Bring supported RBXL and RBXLX project files made by you into Playsculpt.
+                    Compatible maps, builds, mesh parts, and supported scripts can be moved
+                    into Playsculpt tools.
+                </p>
+
+                <p>
+                    Only import games, scripts, meshes, and assets that you created or have
+                    permission to use.
+                </p>
+
+                <a class="button" href="importinfo.html">Import Info</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">&copy; 2026 Playsculpt</div>
+
+</div>
+
+</body>
+</html>

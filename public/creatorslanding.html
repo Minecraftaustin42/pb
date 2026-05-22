@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Playsculpt Creator Landing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:"Courier New", monospace;
+    background:#7fc7ff;
+    color:#111;
+    overflow:hidden;
+}
+
+.page{
+    max-width:1400px;
+    margin:0 auto;
+    border-left:4px solid #111;
+    border-right:4px solid #111;
+    background:#f3f3f3;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    font-size:40px;
+    font-weight:bold;
+    padding:12px;
+    border-bottom:4px solid #111;
+    flex-shrink:0;
+}
+
+.main{
+    display:grid;
+    grid-template-columns:40% 60%;
+    height:100%;
+    overflow:hidden;
+}
+
+/* LEFT SCENE */
+
+.scene{
+    position:relative;
+    background:#7fc7ff;
+    border-right:4px solid #111;
+    overflow:hidden;
+    height:100%;
+}
+
+/* SKY */
+
+.sun{
+    position:absolute;
+    right:35px;
+    top:35px;
+    width:72px;
+    height:72px;
+    background:#ffd83b;
+    border:4px solid #d49d00;
+    border-radius:50%;
+}
+
+.cloud{
+    position:absolute;
+    top:90px;
+    left:40px;
+    width:90px;
+    height:25px;
+    background:white;
+    border:2px solid #ddd;
+    box-shadow:40px 15px 0 white, 85px 0 0 white;
+}
+
+.cloud2{
+    top:180px;
+    left:260px;
+}
+
+/* GROUND */
+
+.ground{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:130px;
+    background:#3f8f3b;
+    border-top:4px solid #226622;
+}
+
+/* ROAD */
+
+.road{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    width:130px;
+    height:130px;
+    transform:translateX(-50%);
+    background:#777;
+    border-left:4px solid #555;
+    border-right:4px solid #555;
+}
+
+.road-line{
+    position:absolute;
+    left:50%;
+    bottom:10px;
+    width:10px;
+    height:105px;
+    transform:translateX(-50%);
+    background:repeating-linear-gradient(
+        to bottom,
+        #fff 0,
+        #fff 18px,
+        transparent 18px,
+        transparent 34px
+    );
+}
+
+/* SKYSCRAPER */
+
+.skyscraper{
+    position:absolute;
+    left:50%;
+    bottom:95px;
+    width:210px;
+    height:330px;
+    transform:translateX(-50%);
+    background:#b9b9c9;
+    border:5px solid #333;
+}
+
+.skyscraper-top{
+    position:absolute;
+    left:50%;
+    bottom:425px;
+    width:145px;
+    height:60px;
+    transform:translateX(-50%);
+    background:#9696aa;
+    border:5px solid #333;
+}
+
+.antenna{
+    position:absolute;
+    left:50%;
+    bottom:485px;
+    width:10px;
+    height:48px;
+    transform:translateX(-50%);
+    background:#333;
+}
+
+.window-grid{
+    position:absolute;
+    left:20px;
+    top:22px;
+    width:165px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:9px;
+}
+
+.window{
+    height:25px;
+    background:#7fc7ff;
+    border:3px solid #333;
+}
+
+.door{
+    position:absolute;
+    left:50%;
+    bottom:0;
+    width:55px;
+    height:75px;
+    transform:translateX(-50%);
+    background:#4b2a96;
+    border:4px solid #111;
+}
+
+.creator-sign{
+    position:absolute;
+    left:50%;
+    bottom:55px;
+    width:210px;
+    transform:translateX(-50%);
+    background:#ffd83b;
+    border:4px solid #111;
+    text-align:center;
+    font-weight:bold;
+    padding:8px;
+}
+
+/* FLOATING BLOCKS */
+
+.block{
+    position:absolute;
+    width:44px;
+    height:44px;
+    border:4px solid #111;
+}
+
+.block1{
+    left:45px;
+    bottom:180px;
+    background:#49a33f;
+}
+
+.block2{
+    right:50px;
+    bottom:230px;
+    background:#2468d8;
+}
+
+.block3{
+    left:70px;
+    top:300px;
+    background:#d94c43;
+}
+
+/* RIGHT CONTENT */
+
+.content{
+    padding:18px;
+    overflow-y:auto;
+    height:100%;
+    background:#f3f3f3;
+}
+
+.content-box{
+    max-width:850px;
+    margin:0 auto;
+    background:white;
+    border:4px solid #222;
+    padding:22px;
+}
+
+h1{
+    margin:0;
+    font-size:30px;
+    color:#2447a8;
+}
+
+.subtitle{
+    font-size:17px;
+    line-height:1.5;
+    margin:10px 0 16px;
+}
+
+.nav-buttons{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin:15px 0;
+}
+
+.button{
+    background:#2447c7;
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    border:3px solid #111;
+    font-weight:bold;
+    text-align:center;
+    display:block;
+}
+
+.button:hover{
+    background:#4b2a96;
+}
+
+.creator-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.card{
+    background:#eeeeff;
+    border:3px solid #333;
+    padding:13px;
+}
+
+.card b{
+    color:#4b2a96;
+    font-size:18px;
+}
+
+.wide{
+    grid-column:1 / -1;
+    background:#fff4cf;
+    border:4px solid #7c5b18;
+}
+
+.section-title{
+    color:#2447a8;
+    border-top:3px solid #4b2a96;
+    padding-top:14px;
+    margin-top:22px;
+}
+
+.steps{
+    display:grid;
+    gap:10px;
+}
+
+.step{
+    border:3px solid #111;
+    background:#f7f7f7;
+    padding:12px;
+}
+
+.footer{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-top:4px solid #111;
+    flex-shrink:0;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    body{
+        overflow:auto;
+    }
+
+    .page{
+        height:auto;
+    }
+
+    .main{
+        display:block;
+        height:auto;
+        overflow:visible;
+    }
+
+    .scene{
+        height:420px;
+        border-right:none;
+        border-bottom:4px solid #111;
+    }
+
+    .content{
+        height:auto;
+        overflow:visible;
+    }
+
+    .skyscraper{
+        width:165px;
+        height:245px;
+        bottom:85px;
+    }
+
+    .skyscraper-top{
+        width:120px;
+        height:48px;
+        bottom:330px;
+    }
+
+    .antenna{
+        bottom:378px;
+        height:38px;
+    }
+
+    .window-grid{
+        width:125px;
+        gap:7px;
+        left:16px;
+    }
+
+    .window{
+        height:18px;
+    }
+
+    .creator-grid{
+        grid-template-columns:1fr;
+    }
+
+    .block3{
+        display:none;
+    }
+}
+
+@media(max-width:600px){
+
+    .header{
+        font-size:28px;
+    }
+
+    .nav-buttons{
+        grid-template-columns:1fr;
+    }
+
+    .content-box{
+        padding:15px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    .cloud2{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="header">Playsculpt Creator Hub</div>
+
+<div class="main">
+
+    <!-- LEFT SIDE -->
+
+    <div class="scene">
+
+        <div class="sun"></div>
+
+        <div class="cloud"></div>
+        <div class="cloud cloud2"></div>
+
+        <div class="antenna"></div>
+
+        <div class="skyscraper-top"></div>
+
+        <div class="skyscraper">
+
+            <div class="window-grid">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+            </div>
+
+            <div class="door"></div>
+
+        </div>
+
+        <div class="creator-sign">
+            CREATOR TOWER
+        </div>
+
+  
+
+        <div class="ground"></div>
+
+        <div class="road">
+            <div class="road-line"></div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="content">
+
+        <div class="content-box">
+
+            <h1>Create games from your browser!</h1>
+
+            <p class="subtitle">
+                Playsculpt gives creators a simple place to build games,
+                publish worlds, share assets, grow a portfolio,
+                and become known in the community.
+            </p>
+
+            <div class="nav-buttons">
+                <a class="button" href="signup.html">Start Creating</a>
+                <a class="button" href="index.html">Home</a>
+                <a class="button" href="importinfo.html">Import Info</a>
+            </div>
+
+            <div class="creator-grid">
+
+                <div class="card">
+                    <b>Browser Builder</b><br><br>
+                    Build directly on the web without needing a big download.
+                    Create on PC, mobile, tablet, or school computers.
+                </div>
+
+                <div class="card">
+                    <b>Game Publishing</b><br><br>
+                    Publish your game for the community to play,
+                    rate, favorite, and share with friends.
+                </div>
+
+                <div class="card">
+                    <b>Creator Marketplace</b><br><br>
+                    Make free or paid assets using Sculpt Coins.
+                    Share models, scripts, templates, maps,
+                    and game kits.
+                </div>
+
+                <div class="card">
+                    <b>Team Projects</b><br><br>
+                    Work with other creators, split jobs,
+                    build studios, and grow development teams.
+                </div>
+
+                <div class="card">
+                    <b>Portfolio System</b><br><br>
+                    Show your games, builds, badges,
+                    and creator history on your profile.
+                </div>
+
+                <div class="card">
+                    <b>Asset Trading</b><br><br>
+                    Trade assets, sell game ownership,
+                    transfer projects, and grow a creator economy.
+                </div>
+
+                <div class="card wide">
+                    <b>Import Your Existing Work</b><br><br>
+
+                    Import supported RBXL and RBXLX files created by you.
+                    Bring compatible maps, mesh parts, builds,
+                    and supported scripts into Playsculpt.
+
+                    <br><br>
+
+                    <a class="button" href="importinfo.html">
+                        Learn About Importing
+                    </a>
+                </div>
+
+            </div>
+
+            <h2 class="section-title">How Creating Works</h2>
+
+            <div class="steps">
+
+                <div class="step">
+                    <b>1. Start a Project</b><br>
+                    Create a blank world, template, or imported project.
+                </div>
+
+                <div class="step">
+                    <b>2. Build Your Game</b><br>
+                    Add parts, scripts, UI, worlds, and gameplay systems.
+                </div>
+
+                <div class="step">
+                    <b>3. Publish to Playsculpt</b><br>
+                    Release your game for the community to play.
+                </div>
+
+                <div class="step">
+                    <b>4. Grow as a Creator</b><br>
+                    Build your portfolio, sell assets,
+                    and improve your games over time.
+                </div>
+
+            </div>
+
+            <h2 class="section-title">Why Creators Matter</h2>
+
+            <p>
+                Playsculpt is built around creators.
+                Every game, world, script, and asset helps
+                grow the platform and community.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    &copy; 2026 Playsculpt
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "playsculpt",
+  "version": "1.0.0",
+  "description": "A 2016 nostalgic 2D game creation platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^4.22.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

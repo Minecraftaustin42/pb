@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - Playsculpt</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:"Courier New", monospace;
+    background:#7fc7ff;
+    color:#111;
+}
+
+.page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    font-size:40px;
+    font-weight:bold;
+    padding:12px;
+    border-bottom:4px solid #111;
+}
+
+.main{
+    flex:1;
+    display:grid;
+    grid-template-columns:48% 52%;
+}
+
+/* LEFT SCENE */
+
+.scene{
+    position:relative;
+    background:#7fc7ff;
+    overflow:hidden;
+    border-right:4px solid #111;
+}
+
+.sun{
+    position:absolute;
+    right:38px;
+    top:35px;
+    width:70px;
+    height:70px;
+    background:#ffd83b;
+    border:4px solid #d49d00;
+    border-radius:50%;
+}
+
+.cloud{
+    position:absolute;
+    top:90px;
+    left:45px;
+    width:90px;
+    height:25px;
+    background:white;
+    border:2px solid #ddd;
+    box-shadow:40px 15px 0 white, 85px 0 0 white;
+}
+
+.cloud2{
+    top:170px;
+    left:270px;
+}
+
+/* GROUND */
+
+.ground{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:170px;
+    background:#49a33f;
+    border-top:4px solid #2f7429;
+}
+
+/* PLATFORM */
+
+.platform{
+    position:absolute;
+    left:50%;
+    bottom:170px;
+    width:290px;
+    height:35px;
+    transform:translateX(-50%);
+    background:#777;
+    border:4px solid #333;
+}
+
+/* LOGIN TERMINAL */
+
+.terminal{
+    position:absolute;
+    left:50%;
+    bottom:205px;
+    width:240px;
+    height:175px;
+    transform:translateX(-50%);
+    background:#b9b9c9;
+    border:5px solid #333;
+}
+
+.screen{
+    position:absolute;
+    left:20px;
+    top:20px;
+    width:190px;
+    height:90px;
+    background:#6fb5e8;
+    border:5px solid #2447a8;
+}
+
+.screen-line{
+    height:10px;
+    margin:12px;
+    background:#2447a8;
+}
+
+.screen-line.small{
+    width:65%;
+}
+
+.keyboard{
+    position:absolute;
+    left:18px;
+    bottom:18px;
+    width:195px;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:5px;
+}
+
+.key{
+    height:14px;
+    background:#555;
+    border:2px solid #222;
+}
+
+/* SATELLITE DISH */
+
+.dish-pole{
+    position:absolute;
+    left:95px;
+    bottom:265px;
+    width:12px;
+    height:120px;
+    background:#555;
+    border:3px solid #222;
+}
+
+.dish{
+    position:absolute;
+    left:52px;
+    bottom:360px;
+    width:95px;
+    height:55px;
+    background:#d9d9d9;
+    border:4px solid #333;
+    border-radius:50%;
+    transform:rotate(-18deg);
+}
+
+.signal{
+    position:absolute;
+    border:4px solid transparent;
+    border-top:4px solid #4b2a96;
+    border-radius:50%;
+}
+
+.signal1{
+    width:60px;
+    height:60px;
+    left:120px;
+    bottom:390px;
+}
+
+.signal2{
+    width:95px;
+    height:95px;
+    left:110px;
+    bottom:375px;
+}
+
+.signal3{
+    width:130px;
+    height:130px;
+    left:100px;
+    bottom:360px;
+}
+
+/* FLOATING BLOCKS */
+
+.block{
+    position:absolute;
+    width:45px;
+    height:45px;
+    border:4px solid #111;
+}
+
+.block1{
+    right:70px;
+    bottom:105px;
+    background:#2468d8;
+}
+
+.block2{
+    left:60px;
+    bottom:95px;
+    background:#d94c43;
+}
+
+.block3{
+    right:95px;
+    top:260px;
+    background:#ffd83b;
+}
+
+/* SIGN */
+
+.sign{
+    position:absolute;
+    left:50%;
+    bottom:455px;
+    width:260px;
+    transform:translateX(-50%);
+    background:#ffd83b;
+    border:4px solid #111;
+    text-align:center;
+    font-weight:bold;
+    padding:10px;
+}
+
+/* RIGHT LOGIN AREA */
+
+.login-area{
+    background:#f3f3f3;
+    padding:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.login-box{
+    width:100%;
+    max-width:560px;
+    background:white;
+    border:4px solid #222;
+    padding:24px;
+}
+
+h1{
+    margin:0 0 8px;
+    color:#2447a8;
+    font-size:32px;
+}
+
+.subtitle{
+    line-height:1.45;
+    margin:0 0 18px;
+}
+
+.form-row{
+    margin-bottom:14px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    color:#4b2a96;
+    margin-bottom:5px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    font-family:"Courier New", monospace;
+    font-size:16px;
+    border:3px solid #111;
+    background:#eeeeff;
+}
+
+input:focus{
+    outline:none;
+    background:white;
+}
+
+.login-button{
+    width:100%;
+    background:#2447c7;
+    color:white;
+    border:3px solid #111;
+    font-family:"Courier New", monospace;
+    font-size:18px;
+    font-weight:bold;
+    padding:13px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.login-button:hover{
+    background:#4b2a96;
+}
+
+.small-links{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.small-links a{
+    background:#fff4cf;
+    color:#111;
+    text-decoration:none;
+    border:3px solid #7c5b18;
+    padding:10px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.note{
+    margin-top:16px;
+    background:#eeeeff;
+    border:3px solid #333;
+    padding:12px;
+    line-height:1.4;
+}
+
+.footer{
+    background:#4b2a96;
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-top:4px solid #111;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .main{
+        display:flex;
+        flex-direction:column;
+    }
+
+    .scene{
+        height:390px;
+        border-right:none;
+        border-bottom:4px solid #111;
+    }
+
+    .terminal{
+        width:200px;
+        height:145px;
+        bottom:170px;
+    }
+
+    .screen{
+        width:155px;
+        height:70px;
+    }
+
+    .keyboard{
+        width:160px;
+    }
+
+    .platform{
+        width:250px;
+    }
+
+    .sign{
+        bottom:345px;
+    }
+
+    .dish-pole,
+    .dish,
+    .signal{
+        display:none;
+    }
+
+    .ground{
+        height:135px;
+    }
+
+    .cloud2{
+        display:none;
+    }
+}
+
+@media(max-width:520px){
+
+    .header{
+        font-size:28px;
+    }
+
+    .login-box{
+        padding:16px;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .small-links{
+        grid-template-columns:1fr;
+    }
+
+    .scene{
+        height:320px;
+    }
+
+    .terminal{
+        width:175px;
+        height:125px;
+        bottom:130px;
+    }
+
+    .screen{
+        width:130px;
+        height:58px;
+    }
+
+    .keyboard{
+        width:138px;
+    }
+
+    .platform{
+        width:220px;
+        bottom:130px;
+    }
+
+    .sign{
+        width:220px;
+        bottom:275px;
+        font-size:14px;
+    }
+
+    .block3{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="header">Login to Playsculpt</div>
+
+<div class="main">
+
+    <!-- LEFT SCENE -->
+
+    <div class="scene">
+
+        <div class="sun"></div>
+
+        <div class="cloud"></div>
+        <div class="cloud cloud2"></div>
+
+        <div class="sign">LOGIN</div>
+
+     
+
+        <div class="platform"></div>
+
+        <div class="terminal">
+
+            <div class="screen">
+                <div class="screen-line"></div>
+                <div class="screen-line small"></div>
+                <div class="screen-line"></div>
+            </div>
+
+            <div class="keyboard">
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+            </div>
+
+        </div>
+
+   
+
+        <div class="ground"></div>
+
+    </div>
+
+    <!-- RIGHT LOGIN -->
+
+    <div class="login-area">
+
+        <div class="login-box">
+
+            <h1>Welcome back!</h1>
+
+            <p class="subtitle">
+                Log in to continue playing games, building worlds,
+                managing projects, and exploring Playsculpt.
+            </p>
+
+            <form action="/login" method="POST">
+
+                <div class="form-row">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Enter your username" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Enter your password" required>
+                </div>
+
+                <button class="login-button" type="submit">Login</button>
+
+            </form>
+
+            <div class="small-links">
+                <a href="signup.html">Create Account</a>
+                <a href="index.html">Back Home</a>
+            </div>
+
+            <div class="note">
+                <b>Tip:</b><br>
+                After logging in, you can play games, continue projects,
+                manage assets, and create on Playsculpt.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer">&copy; 2026 Playsculpt</div>
+
+</div>
+
+</body>
+</html>
