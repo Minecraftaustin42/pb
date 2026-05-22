@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sculpt City Welcome Plaza</title>
+  <style>
+    body { margin:0; font-family:"Courier New", monospace; background:#87c9ff; overflow:hidden; }
+    #ui { position:fixed; inset:0; pointer-events:none; color:#fff; }
+    .topbar { position:absolute; top:12px; left:12px; background:rgba(26,27,39,.78); border:2px solid #fff; padding:10px; min-width:280px; }
+    .overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#000; opacity:1; transition:opacity 1.8s; }
+    .overlay.hide { opacity:0; pointer-events:none; }
+    .welcomeText { text-align:center; font-size:clamp(24px,3vw,40px); max-width:900px; }
+    .dialog { position:absolute; left:50%; transform:translateX(-50%); bottom:20px; width:min(780px,92vw); background:rgba(255,255,255,.92); color:#111; border:3px solid #111; padding:14px; pointer-events:auto; }
+    .choices { display:flex; gap:10px; margin-top:10px; }
+    button { font-family:inherit; border:2px solid #111; background:#4d74ff; color:#fff; padding:10px 14px; cursor:pointer; font-weight:bold; }
+    button:hover { background:#2c4fcb; }
+    .status { margin-top:8px; font-weight:bold; color:#2447a8; }
+  </style>
+</head>
+<body>
+  <div id="world"></div>
+  <div id="ui">
+    <div class="topbar">
+      <div id="playerName"></div>
+      <div id="coinLabel">Sculpt Coins: 0</div>
+      <div id="badgeLabel">Badge: -</div>
+    </div>
+    <div id="overlay" class="overlay"><div class="welcomeText">Welcome to Sculpt City — the home of Playsculpt creators and players.</div></div>
+    <div id="dialog" class="dialog" hidden>
+      <div id="dialogText">Hey, you made it. Let's get you moved in.</div>
+      <div id="choices" class="choices"></div>
+      <div class="status" id="statusText"></div>
+    </div>
+  </div>
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const username = params.get('username') || localStorage.getItem('playsculpt_username') || 'GuestCreator';
+    localStorage.setItem('playsculpt_username', username);
+    document.getElementById('playerName').textContent = `Player: ${username}`;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87c9ff);
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
+    camera.position.set(0, 10, 20);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    document.getElementById('world').appendChild(renderer.domElement);
+
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x547d2f, 0.95); scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xfff0bf, 0.8); sun.position.set(30,40,20); scene.add(sun);
+
+    const ground = new THREE.Mesh(new THREE.BoxGeometry(80, 1, 80), new THREE.MeshLambertMaterial({color: 0x70b35f}));
+    ground.position.y = -0.5; scene.add(ground);
+
+    const plaza = new THREE.Mesh(new THREE.BoxGeometry(18, 0.4, 18), new THREE.MeshLambertMaterial({color: 0xd5c6a0}));
+    plaza.position.y = 0.2; scene.add(plaza);
+
+    const player = new THREE.Mesh(new THREE.BoxGeometry(1,2,1), new THREE.MeshLambertMaterial({color:0x2345b8}));
+    player.position.set(0,1,3); scene.add(player);
+
+    const npc = new THREE.Mesh(new THREE.BoxGeometry(1.2,2.2,1.2), new THREE.MeshLambertMaterial({color:0xf1c98c}));
+    npc.position.set(2,1.1,0); scene.add(npc);
+
+    const houses = [];
+    const houseLights = [];
+    const houseSlots = [{x:-18,z:-12},{x:-8,z:-12},{x:2,z:-12},{x:12,z:-12},{x:22,z:-12}];
+    function spawnHouse(slot, owner = null, active = false){
+      const pos = houseSlots[slot] || {x:slot*8-18, z:-12};
+      const group = new THREE.Group();
+      const base = new THREE.Mesh(new THREE.BoxGeometry(6,4,6), new THREE.MeshLambertMaterial({color:active?0xa9d4ff:0xc4b7a0})); base.position.y = 2;
+      const roof = new THREE.Mesh(new THREE.ConeGeometry(4.8,2.5,4), new THREE.MeshLambertMaterial({color:0x8f4833})); roof.position.y = 5; roof.rotation.y = Math.PI/4;
+      const sign = new THREE.Mesh(new THREE.BoxGeometry(3,1,0.2), new THREE.MeshLambertMaterial({color:owner?0xb6e693:0xffffff})); sign.position.set(0,1.4,3.2);
+      const lamp = new THREE.PointLight(0xffee88, active?1.1:0, 18); lamp.position.set(0,3,0);
+      group.position.set(pos.x,0,pos.z); group.add(base, roof, sign, lamp); scene.add(group);
+      houses.push({slot, owner, sign, mesh:group}); houseLights.push(lamp);
+    }
+
+    for (let i=0;i<5;i++) spawnHouse(i);
+
+    const keys = {};
+    addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+    addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+    function movePlayer(){
+      if (keys['w']) player.position.z -= 0.12;
+      if (keys['s']) player.position.z += 0.12;
+      if (keys['a']) player.position.x -= 0.12;
+      if (keys['d']) player.position.x += 0.12;
+      player.position.x = Math.max(-35, Math.min(35, player.position.x));
+      player.position.z = Math.max(-35, Math.min(35, player.position.z));
+      camera.position.x += (player.position.x - camera.position.x) * 0.08;
+      camera.position.z += (player.position.z + 20 - camera.position.z) * 0.08;
+    }
+
+    const overlay = document.getElementById('overlay');
+    const dialog = document.getElementById('dialog');
+    const dialogText = document.getElementById('dialogText');
+    const choices = document.getElementById('choices');
+    const statusText = document.getElementById('statusText');
+
+    function showChoices(items){
+      choices.innerHTML = '';
+      items.forEach((item) => {
+        const b = document.createElement('button');
+        b.textContent = item.label;
+        b.onclick = item.onClick;
+        choices.appendChild(b);
+      });
+    }
+
+    async function loadData(){
+      const res = await fetch(`/api/onboarding?username=${encodeURIComponent(username)}`);
+      return res.json();
+    }
+
+    async function initOnboarding(){
+      const data = await loadData();
+      data.houses.forEach(h => {
+        const local = houses.find(x => x.slot === h.slot);
+        if (local){ local.owner = h.owner; local.sign.material.color.set(0xb6e693); houseLights[h.slot].intensity = h.lightsOn ? 1.1 : 0; }
+      });
+      document.getElementById('coinLabel').textContent = `Sculpt Coins: ${data.coins.balance || 0}`;
+      document.getElementById('badgeLabel').textContent = `Badge: ${data.badges[0]?.name || '-'}`;
+
+      setTimeout(() => {
+        overlay.classList.add('hide');
+        dialog.hidden = false;
+
+        if (data.progress?.completed) {
+          dialogText.textContent = `Welcome back, ${username}! Sculpt City is your home base for creating and playing.`;
+          showChoices([{label:'Explore Myself', onClick:()=> statusText.textContent='Use WASD to roam Sculpt City.'}]);
+          return;
+        }
+
+        dialogText.textContent = 'Hey, you made it. Let\'s get you moved in.';
+        showChoices([
+          { label:'Start Tour', onClick: startTour },
+          { label:'Explore Myself', onClick: async () => { await grantWelcomeRewards(); statusText.textContent = 'You can explore now. Press WASD to walk around.'; }}
+        ]);
+      }, 2000);
+    }
+
+    async function grantWelcomeRewards(){
+      const res = await fetch('/api/onboarding/complete', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username })});
+      const out = await res.json();
+      const refreshed = await loadData();
+      document.getElementById('coinLabel').textContent = `Sculpt Coins: ${refreshed.coins.balance || 0}`;
+      document.getElementById('badgeLabel').textContent = `Badge: ${refreshed.badges[0]?.name || '-'}`;
+      if (out.success) statusText.textContent = 'Welcome Badge unlocked + Sculpt Coins added!';
+    }
+
+    async function startTour(){
+      dialogText.textContent = 'Neighborhood: claim your starter home.';
+      showChoices(houses.map(h => ({label:`Claim House ${h.slot+1}`, onClick:()=>claimHouse(h.slot)})));
+    }
+
+    async function claimHouse(slot){
+      const res = await fetch('/api/houses/claim', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, slot })});
+      const out = await res.json();
+      if (!out.success){ statusText.textContent = out.error || 'Claim failed'; return; }
+      const local = houses.find(x => x.slot === slot);
+      local.owner = username;
+      local.sign.material.color.set(0xb6e693);
+      houseLights[slot].intensity = 1.1;
+      await grantWelcomeRewards();
+      statusText.textContent = `Home Claimed: House ${slot+1} now belongs to ${username}.`;
+      dialogText.textContent = 'Great choice! Your mailbox and lights are now live. Enjoy Sculpt City!';
+      showChoices([{label:'Explore Myself', onClick:()=> statusText.textContent='WASD to explore. Build and play experiences soon!'}]);
+    }
+
+    function animate(){ requestAnimationFrame(animate); movePlayer(); renderer.render(scene,camera); }
+    addEventListener('resize', ()=>{ camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight);});
+
+    initOnboarding();
+    animate();
+  </script>
+</body>
+</html>
